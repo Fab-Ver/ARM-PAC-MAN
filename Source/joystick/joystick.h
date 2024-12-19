@@ -9,4 +9,11 @@
 *********************************************************************************************************/
 
 /* lib_joystick */
+#ifndef __JOYSTICK_H
+#define __JOYSTICK_H
+
+#define JOYSTICK_MASK ((1 << 29) | (1 << 28) | (1 << 27) | (1 << 26) | (1 << 25))
+
 void joystick_init(void);
+
+#endif

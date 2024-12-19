@@ -10,6 +10,9 @@
 #include "LPC17xx.h"
 #include "RIT.h"
 #include "../led/led.h"
+#include <stdio.h>
+#include "GLCD.h"
+#include "joystick/funct_joystick.h"
 
 /******************************************************************************
 ** Function name:		RIT_IRQHandler
@@ -21,66 +24,22 @@
 **
 ******************************************************************************/
 
-volatile int down=0;
-
 void RIT_IRQHandler (void)
-{					
-	static int up=0;
-	static int position=0;	
+{	
+	static uint32_t prev_joystick_state = (1 << 25);
+	uint32_t joystick_state = LPC_GPIO1->FIOPIN & JOYSTICK_MASK;
 	
-	if((LPC_GPIO1->FIOPIN & (1<<29)) == 0){	
-		/* Joytick UP pressed */
-		up++;
-		switch(up){
-			case 1:
-				LED_Off(position);
-				LED_On(0);
-				position = 0;
-				break;
-			case 60:	//3sec = 3000ms/50ms = 60
-				LED_Off(position);
-				LED_On(7);
-				position = 7;
-				break;
-			default:
-				break;
-		}
-	}
-	else{
-			up=0;
-	}
-	
-	/* button management */
-	if(down>=1){ 
-		if((LPC_GPIO2->FIOPIN & (1<<11)) == 0){	/* KEY1 pressed */
-			switch(down){				
-				case 2:				/* pay attention here: please see slides 19_ to understand value 2 */
-				if( position == 7){
-					LED_On(0);
-					LED_Off(7);
-					position = 0;
-				}
-				else{
-					LED_Off(position);
-					LED_On(++position);
-				}
-					break;
-				default:
-					break;
-			}
-			down++;
-		}
-		else {	/* button released */
-			down=0;			
-			NVIC_EnableIRQ(EINT1_IRQn);							 /* enable Button interrupts			*/
-			LPC_PINCON->PINSEL4    |= (1 << 22);     /* External interrupt 0 pin selection */
-		}
-	}
-/*	else{
-			if(down==1)
-				down++;
-	} */
-	
+	joystick_state = ~joystick_state & JOYSTICK_MASK;
+	/*
+		If no action selected perform the previos action
+	*/
+	if(joystick_state == 0){
+		perform_action(prev_joystick_state);
+	} else if (!(joystick_state & (joystick_state - 1))) {
+		perform_action(joystick_state);
+		prev_joystick_state = joystick_state;
+	} 
+
   LPC_RIT->RICTRL |= 0x1;	/* clear interrupt flag */
 	
   return;

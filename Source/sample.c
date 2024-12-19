@@ -30,6 +30,8 @@
 #include "timer/timer.h"
 #include "game_map/game_map.h"
 #include "button/button.h"
+#include "RIT/RIT.h"
+#include "joystick/joystick.h"
 
 
 #ifdef SIMULATOR
@@ -40,6 +42,7 @@ bool pause = true;
 uint8_t PacMan_X = 11; 
 uint8_t PacMan_Y = 18;
 uint8_t current_Pills[25][23] = {0};
+uint16_t current_score = 0;
 
 int main(void)
 {
@@ -52,13 +55,12 @@ int main(void)
 	drawPills();
 	drawPacMan(PacMan_X, PacMan_Y, 11, 11);
 	GUI_Text(95, 190, (uint8_t *) "PAUSE", Yellow, Blue);
-  //TP_Init();
-	//TouchPanel_Calibrate();
-	//LCD_Clear(Black);
-	//GUI_Text(0, 280, (uint8_t *) " touch here : 1 sec to clear  ", Red, White);
-	//TP_DrawPoint(150, 0);
-	//LCD_SetPoint(200, 100, Blue);
-	//LCD_DrawLine(0, 0, 200, 200, White);
+	joystick_init();
+	update_graphic_score(current_score);
+	//init_RIT(0x004C4B40);									/* RIT Initialization 50 msec       	*/
+
+	init_RIT(0x001312D0);
+	//enable_RIT();
 	//init_timer(0, 0x1312D0 ); 						/* 50ms * 25MHz = 1.25*10^6 = 0x1312D0 */
 	//init_timer(0, 0x6108 ); 						  /* 1ms * 25MHz = 25*10^3 = 0x6108 */
 	//init_timer(0, 0x4E2 ); 						    /* 500us * 25MHz = 1.25*10^3 = 0x4E2 */

@@ -6,11 +6,14 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 #define BLOCK_SIZE 10
 #define INITIAL_Y 50 
 #define MAX_PILLS 246
+#define NORMAL_PILLS 240
+#define POWER_PILLS 6
+#define STD_SCORE 10
+#define POWER_SCORE 50
 
 extern uint8_t  ROWS;				//Map rows 
 extern uint8_t  COLUMNS;		//Map columns

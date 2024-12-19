@@ -2,18 +2,19 @@
 #include "LPC17xx.h"
 #include "GLCD/GLCD.h" 
 #include <stdbool.h>
+#include "RIT/RIT.h"
 
 extern bool pause; 
 
 void EINT0_IRQHandler (void)	  	/* INT0														 */
 {		
 	if(pause == true){
-		//Add un-pause logic 
 		GUI_Text(95, 190, (uint8_t *) "     ", Yellow, Blue);
+		enable_RIT();
 		pause = false; 
 	} else {
-		//Add pause logic 
 		GUI_Text(95, 190, (uint8_t *) "PAUSE", Yellow, Blue);
+		disable_RIT();
 		pause = true; 
 	}
 	LPC_SC->EXTINT &= (1 << 0);     /* clear pending interrupt         */

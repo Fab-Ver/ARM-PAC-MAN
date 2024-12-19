@@ -657,6 +657,16 @@
               <FileType>1</FileType>
               <FilePath>.\Source\joystick\lib_joystick.c</FilePath>
             </File>
+            <File>
+              <FileName>joystick.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\joystick\joystick.h</FilePath>
+            </File>
+            <File>
+              <FileName>funct_joystick.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\joystick\funct_joystick.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -691,6 +701,11 @@
               <FileName>lib_RIT.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Source\RIT\lib_RIT.c</FilePath>
+            </File>
+            <File>
+              <FileName>RIT.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\RIT\RIT.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1339,6 +1354,16 @@
               <FileType>1</FileType>
               <FilePath>.\Source\joystick\lib_joystick.c</FilePath>
             </File>
+            <File>
+              <FileName>joystick.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\joystick\joystick.h</FilePath>
+            </File>
+            <File>
+              <FileName>funct_joystick.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\joystick\funct_joystick.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1373,6 +1398,11 @@
               <FileName>lib_RIT.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Source\RIT\lib_RIT.c</FilePath>
+            </File>
+            <File>
+              <FileName>RIT.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\RIT\RIT.h</FilePath>
             </File>
           </Files>
         </Group>

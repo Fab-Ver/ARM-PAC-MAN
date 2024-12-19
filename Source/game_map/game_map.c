@@ -4,9 +4,8 @@
 void drawMap(void){
 	LCD_Clear(Black);
 	GUI_Text(10, 10, (uint8_t *) "Game Over in", White, Black);
-	GUI_Text(185, 10, (uint8_t *) "SCORE", White, Black);
+	GUI_Text(180, 10, (uint8_t *) "SCORE", White, Black);
 	GUI_Text(10, 30, (uint8_t *) "60s", White, Black); // -->	move to other location
-	GUI_Text(185, 30, (uint8_t *) "00", White, Black); // --> move to other location
 	uint8_t x,y;
 		for (y = 0; y < ROWS; y++) {
         for (x = 0; x < COLUMNS; x++) {
