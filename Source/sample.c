@@ -22,6 +22,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "LPC17xx.h"
 #include "GLCD/GLCD.h" 
 #include "TouchPanel/TouchPanel.h"
@@ -29,27 +31,31 @@
 #include "game_map/game_map.h"
 #include "button/button.h"
 
+
 #ifdef SIMULATOR
 extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emulator to find the symbol (can be placed also inside system_LPC17xx.h but since it is RO, it needs more work)
 #endif
 
 bool pause = true; 
+uint8_t PacMan_X = 11; 
+uint8_t PacMan_Y = 18;
+uint8_t current_Pills[25][23] = {0};
 
 int main(void)
 {
-
+	srand(SysTick->VAL);
   SystemInit();  												/* System Initialization (i.e., PLL)  */
 	
 	BUTTON_init();
   LCD_Initialization();
 	drawMap();
+	drawPills();
+	drawPacMan(PacMan_X, PacMan_Y, 11, 11);
 	GUI_Text(95, 190, (uint8_t *) "PAUSE", Yellow, Blue);
   //TP_Init();
 	//TouchPanel_Calibrate();
-	
 	//LCD_Clear(Black);
 	//GUI_Text(0, 280, (uint8_t *) " touch here : 1 sec to clear  ", Red, White);
-
 	//TP_DrawPoint(150, 0);
 	//LCD_SetPoint(200, 100, Blue);
 	//LCD_DrawLine(0, 0, 200, 200, White);
