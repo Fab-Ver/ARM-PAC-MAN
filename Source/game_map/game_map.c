@@ -1,6 +1,14 @@
 #include "game_map.h"
 #include <stdio.h>
 
+#define MULTIPLIER 1664525
+#define INCREMENT 1013904223
+#define MODULUS 0xFFFFFFFF
+
+extern uint32_t seed;
+
+uint32_t random_number();
+
 void drawMap(void){
 	LCD_Clear(Black);
 	GUI_Text(10, 10, (uint8_t *) "Game Over in", White, Black);
@@ -68,7 +76,7 @@ void drawPills(){
     int special_pills_count = 0;
     while (special_pills_count < 6) {
         if (special_pills_count < count) {
-            int index = rand() % count;
+            int index = random_number() % count;
             int pill_x = pill_positions[index].x;
             int pill_y = pill_positions[index].y;
             if (current_Pills[pill_y][pill_x] == 1) {
@@ -104,4 +112,9 @@ void drawLives(){
 		}
 		x+=15;
 	}
+}
+
+uint32_t random_number() {
+    seed = (MULTIPLIER * seed + INCREMENT) % MODULUS;
+    return seed;
 }
