@@ -5,8 +5,8 @@ void drawMap(void){
 	LCD_Clear(Black);
 	GUI_Text(10, 10, (uint8_t *) "Game Over in", White, Black);
 	GUI_Text(180, 10, (uint8_t *) "SCORE", White, Black);
-	GUI_Text(10, 30, (uint8_t *) "60s", White, Black); // -->	move to other location
 	uint8_t x,y;
+	GUI_Text(10, 305, (uint8_t *) "LIVES:", White, Black);
 		for (y = 0; y < ROWS; y++) {
         for (x = 0; x < COLUMNS; x++) {
 					  int index = y * COLUMNS + x; 
@@ -14,7 +14,7 @@ void drawMap(void){
 							uint8_t dx, dy; 
 							for (dy = 0; dy < BLOCK_SIZE; dy++) {
                     for (dx = 0; dx < BLOCK_SIZE; dx++) {
-                        LCD_SetPoint(BLOCK_SIZE * x + dx, BLOCK_SIZE * y + dy + INITIAL_Y, Blue);
+                        LCD_SetPoint(BLOCK_SIZE * x + dx + INITIAL_X, BLOCK_SIZE * y + dy + INITIAL_Y, Blue);
                     }
               }
 						} 
@@ -30,16 +30,16 @@ void drawPacMan(uint8_t x_new, uint8_t y_new, uint8_t x_old, uint8_t y_old){
 	for (dy = 0; dy < BLOCK_SIZE; dy++) {
 		for (dx = 0; dx < BLOCK_SIZE; dx++) {
 			int index = dy * BLOCK_SIZE + dx; 
-			LCD_SetPoint(BLOCK_SIZE * x_old + dx, BLOCK_SIZE * y_old + dy + INITIAL_Y, Black);
+			LCD_SetPoint(BLOCK_SIZE * x_old + dx + INITIAL_X, BLOCK_SIZE * y_old + dy + INITIAL_Y, Black);
 			if(PacMan[index] == 1){
-				LCD_SetPoint(BLOCK_SIZE * x_new + dx, BLOCK_SIZE * y_new + dy + INITIAL_Y, Yellow);
+				LCD_SetPoint(BLOCK_SIZE * x_new + dx + INITIAL_X, BLOCK_SIZE * y_new + dy + INITIAL_Y, Yellow);
 			}
 		}
   }
 }
 
 void drawPills(){
-	uint8_t xt, yt;
+		uint8_t xt, yt, dy, dx;
     int count = 0;
     Position pill_positions[MAX_PILLS];
 		
@@ -53,11 +53,11 @@ void drawPills(){
                     pill_positions[count].y = yt;
                     count++;
                 }
-                for (int dy = 0; dy < BLOCK_SIZE; dy++) {
-                    for (int dx = 0; dx < BLOCK_SIZE; dx++) {
+                for (dy = 0; dy < BLOCK_SIZE; dy++) {
+                    for (dx = 0; dx < BLOCK_SIZE; dx++) {
                         int i = dy * BLOCK_SIZE + dx;
                         if (Pill[i] == 1) {
-                            LCD_SetPoint(BLOCK_SIZE * xt + dx, BLOCK_SIZE * yt + dy + INITIAL_Y, Red);
+                            LCD_SetPoint(BLOCK_SIZE * xt + dx + INITIAL_X, BLOCK_SIZE * yt + dy + INITIAL_Y, Red);
                         }
                     }
                 }
@@ -74,15 +74,34 @@ void drawPills(){
             if (current_Pills[pill_y][pill_x] == 1) {
                 current_Pills[pill_y][pill_x]++;
                 special_pills_count++;
-                for (int dy = 0; dy < BLOCK_SIZE; dy++) {
-                    for (int dx = 0; dx < BLOCK_SIZE; dx++) {
+                for (dy = 0; dy < BLOCK_SIZE; dy++) {
+                    for (dx = 0; dx < BLOCK_SIZE; dx++) {
                         int i = dy * BLOCK_SIZE + dx;
                         if (Pill[i] == 1) {
-                            LCD_SetPoint(BLOCK_SIZE * pill_x + dx, BLOCK_SIZE * pill_y + dy + INITIAL_Y, Green);
+                            LCD_SetPoint(BLOCK_SIZE * pill_x + dx + INITIAL_X, BLOCK_SIZE * pill_y + dy + INITIAL_Y, Green);
                         }
                     }
                 }
             }
         }
     }
+}
+
+void drawLives(){
+	int i;
+	uint8_t dx, dy; 
+	uint16_t x = 60;
+	uint16_t y = 307;
+	for(i=0; i < lives + 1; i++){
+		for (dy = 0; dy < BLOCK_SIZE; dy++) {
+			for (dx = 0; dx < BLOCK_SIZE; dx++) {
+				int index = dy * BLOCK_SIZE + dx; 
+				LCD_SetPoint(x + dx,y + dy, Black);
+				if(PacMan[index] == 1 && i < lives){
+					LCD_SetPoint( x + dx, y+ dy, Yellow);
+				}
+			}
+		}
+		x+=15;
+	}
 }

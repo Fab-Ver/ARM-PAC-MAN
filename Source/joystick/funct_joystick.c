@@ -11,6 +11,8 @@
 #include "LPC17xx.h"
 #include "funct_joystick.h"
 
+int next_life = 0;
+
 
 /*----------------------------------------------------------------------------
   Function that performs the selected movement
@@ -99,16 +101,24 @@ bool check_teleport(uint8_t x, uint8_t y){
 void update_score(uint8_t new_x, uint8_t new_y){
 	if(current_Pills[new_y][new_x] == 1){
 		current_score+=STD_SCORE;
+		next_life+=STD_SCORE;
 		update_graphic_score(current_score);
 		current_Pills[new_y][new_x] = 0;
 	} else if (current_Pills[new_y][new_x] == 2){
 		current_score+=POWER_SCORE;
+		next_life+=POWER_SCORE;
 		update_graphic_score(current_score);
 		current_Pills[new_y][new_x] = 0;
 	}
+	if(next_life >= 1000){
+		lives++;
+		next_life-=1000;
+		drawLives();
+	}
 	if(current_score == (NORMAL_PILLS*STD_SCORE)+(POWER_PILLS*POWER_SCORE)){
-		GUI_Text(85, 190, (uint8_t *) "VICTORY!", Yellow, Blue);
+		GUI_Text(90, 190, (uint8_t *) "VICTORY!", Yellow, Blue);
 		disable_RIT();
+		disable_timer(0);
 		NVIC_DisableIRQ(EINT1_IRQn);
 		LPC_PINCON->PINSEL4    &= ~(1 << 20);     
 	}

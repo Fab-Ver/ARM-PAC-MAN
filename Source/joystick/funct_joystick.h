@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include "game_map/game_map.h"
 #include "RIT/RIT.h"
+#include "timer/timer.h"
 
 extern uint8_t  Map[];
 extern uint8_t PacMan_X; 
@@ -12,7 +13,7 @@ extern uint8_t PacMan_Y;
 extern uint8_t  COLUMNS;
 extern uint8_t  ROWS;		
 extern uint16_t current_score;
-
+extern uint8_t lives; 
 
 void perform_action(uint32_t joystick_state);
 bool check_map_collision(uint8_t x, uint8_t y);

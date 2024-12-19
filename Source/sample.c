@@ -43,6 +43,7 @@ uint8_t PacMan_X = 11;
 uint8_t PacMan_Y = 18;
 uint8_t current_Pills[25][23] = {0};
 uint16_t current_score = 0;
+uint8_t lives = 1; 
 
 int main(void)
 {
@@ -53,22 +54,22 @@ int main(void)
   LCD_Initialization();
 	drawMap();
 	drawPills();
+	drawLives();
 	drawPacMan(PacMan_X, PacMan_Y, 11, 11);
-	GUI_Text(95, 190, (uint8_t *) "PAUSE", Yellow, Blue);
+	GUI_Text(100, 190, (uint8_t *) "PAUSE", Yellow, Blue);
 	joystick_init();
 	update_graphic_score(current_score);
-	//init_RIT(0x004C4B40);									/* RIT Initialization 50 msec       	*/
 
-	init_RIT(0x001312D0);
-	//enable_RIT();
+	init_RIT(0x98968);
+	init_timer(0, 0x17D7840); 								// 1s 
+	
+	
 	//init_timer(0, 0x1312D0 ); 						/* 50ms * 25MHz = 1.25*10^6 = 0x1312D0 */
 	//init_timer(0, 0x6108 ); 						  /* 1ms * 25MHz = 25*10^3 = 0x6108 */
 	//init_timer(0, 0x4E2 ); 						    /* 500us * 25MHz = 1.25*10^3 = 0x4E2 */
 	//init_timer(0, 0xC8 ); 						    /* 8us * 25MHz = 200 ~= 0xC8 */
 	
-		
 	
-	//enable_timer(0);
 	
 	LPC_SC->PCON |= 0x1;									/* power-down	mode										*/
 	LPC_SC->PCON &= ~(0x2);						
