@@ -3,15 +3,12 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "game_map/game_map.h"
+#include "game/game.h"
 #include "RIT/RIT.h"
 #include "timer/timer.h"
 
-extern uint8_t  Map[];
 extern uint8_t PacMan_X; 
-extern uint8_t PacMan_Y;
-extern uint8_t  COLUMNS;
-extern uint8_t  ROWS;		
+extern uint8_t PacMan_Y;		
 extern uint16_t current_score;
 extern uint8_t lives; 
 

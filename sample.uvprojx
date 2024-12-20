@@ -730,22 +730,32 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>game_map</GroupName>
+          <GroupName>game</GroupName>
           <Files>
             <File>
-              <FileName>game_map.c</FileName>
+              <FileName>game.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Source\game_map\game_map.c</FilePath>
+              <FilePath>.\Source\game\game.c</FilePath>
             </File>
             <File>
-              <FileName>game_map.h</FileName>
+              <FileName>game.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Source\game_map\game_map.h</FilePath>
+              <FilePath>.\Source\game\game.h</FilePath>
             </File>
             <File>
-              <FileName>game_map.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\Source\game_map\game_map.s</FilePath>
+              <FileName>config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\game\config.h</FilePath>
+            </File>
+            <File>
+              <FileName>shared.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\game\shared.c</FilePath>
+            </File>
+            <File>
+              <FileName>shared.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\game\shared.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1427,22 +1437,32 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>game_map</GroupName>
+          <GroupName>game</GroupName>
           <Files>
             <File>
-              <FileName>game_map.c</FileName>
+              <FileName>game.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Source\game_map\game_map.c</FilePath>
+              <FilePath>.\Source\game\game.c</FilePath>
             </File>
             <File>
-              <FileName>game_map.h</FileName>
+              <FileName>game.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Source\game_map\game_map.h</FilePath>
+              <FilePath>.\Source\game\game.h</FilePath>
             </File>
             <File>
-              <FileName>game_map.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\Source\game_map\game_map.s</FilePath>
+              <FileName>config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\game\config.h</FilePath>
+            </File>
+            <File>
+              <FileName>shared.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\game\shared.c</FilePath>
+            </File>
+            <File>
+              <FileName>shared.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\game\shared.h</FilePath>
             </File>
           </Files>
         </Group>

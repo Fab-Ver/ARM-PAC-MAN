@@ -11,6 +11,10 @@
 #include "LPC17xx.h"
 #include "funct_joystick.h"
 
+#include "game/config.h"
+
+#include "game/shared.h"
+
 int next_life = 0;
 
 
@@ -84,38 +88,38 @@ void perform_action(uint32_t joystick_state){
  *----------------------------------------------------------------------------*/
 bool check_map_collision(uint8_t x, uint8_t y){
 	int index = y * COLUMNS + x;
-	return Map[index] == 1 ? true : false; 
+	return map[y][x] == 1 ? true : false; 
 }
 
 void update_pac_man_position(uint8_t new_x, uint8_t new_y){
-	drawPacMan(new_x, new_y, PacMan_X, PacMan_Y);
+	draw_pac_man(new_x, new_y, PacMan_X, PacMan_Y);
 	PacMan_X = new_x;
 	PacMan_Y = new_y; 
 }
 
 bool check_teleport(uint8_t x, uint8_t y){
 	int index = y * COLUMNS + x;
-	return Map[index] == 1 ? false : true; 
+	return map[y][x] == 1 ? false : true; 
 }
 
 void update_score(uint8_t new_x, uint8_t new_y){
-	if(current_Pills[new_y][new_x] == 1){
+	if(pills[new_y][new_x] == 1){
 		current_score+=STD_SCORE;
 		next_life+=STD_SCORE;
 		update_graphic_score(current_score);
-		current_Pills[new_y][new_x] = 0;
-	} else if (current_Pills[new_y][new_x] == 2){
+		pills[new_y][new_x] = 0;
+	} else if (pills[new_y][new_x] == 2){
 		current_score+=POWER_SCORE;
 		next_life+=POWER_SCORE;
 		update_graphic_score(current_score);
-		current_Pills[new_y][new_x] = 0;
+		pills[new_y][new_x] = 0;
 	}
 	if(next_life >= 1000){
 		lives++;
 		next_life-=1000;
-		drawLives();
+		draw_lives();
 	}
-	if(current_score == (NORMAL_PILLS*STD_SCORE)+(POWER_PILLS*POWER_SCORE)){
+	if(current_score == (STD_PILLS*STD_SCORE)+(POWER_PILLS*POWER_SCORE)){
 		GUI_Text(90, 190, (uint8_t *) "VICTORY!", Yellow, Blue);
 		disable_RIT();
 		disable_timer(0);

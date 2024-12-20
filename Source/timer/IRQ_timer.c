@@ -14,7 +14,9 @@
 #include "../TouchPanel/TouchPanel.h"
 #include <stdio.h> /*for sprintf*/
 #include <string.h>
-#include "game_map/game_map.h"
+#include "game/game.h"
+
+#include "game/config.h"
 
 /******************************************************************************
 ** Function name:		Timer0_IRQHandler
@@ -40,9 +42,9 @@ void TIMER0_IRQHandler (void)
 	if(second == 0){
 		lives--;
 		second = 60;
-		drawLives();
+		draw_lives();
 		if(lives == 0){
-			if(current_score == (NORMAL_PILLS*STD_SCORE)+(POWER_PILLS*POWER_SCORE)){
+			if(current_score == (STD_PILLS*STD_SCORE)+(POWER_PILLS*POWER_SCORE)){
 				GUI_Text(90, 190, (uint8_t *) "VICTORY!", Yellow, Blue);
 				disable_RIT();
 				disable_timer(0);

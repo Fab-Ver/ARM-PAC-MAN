@@ -28,7 +28,7 @@
 #include "GLCD/GLCD.h" 
 #include "TouchPanel/TouchPanel.h"
 #include "timer/timer.h"
-#include "game_map/game_map.h"
+#include "game/game.h"
 #include "button/button.h"
 #include "RIT/RIT.h"
 #include "joystick/joystick.h"
@@ -58,15 +58,16 @@ int main(void)
 	
 	BUTTON_init();
   LCD_Initialization();
-	drawMap();
-	drawLives();
-	drawPacMan(PacMan_X, PacMan_Y, 11, 11);
+	draw_map();
+	draw_lives();
+	draw_pac_man(PacMan_X, PacMan_Y, 11, 11);
 	GUI_Text(100, 190, (uint8_t *) "PAUSE", Yellow, Blue);
 	joystick_init();
 	update_graphic_score(current_score);
 	seed = seed_with_adc_and_timer(); 
 	disable_timer(1);
-	drawPills();
+	generate_power_pills();
+	draw_pills();
 	
 
 	init_RIT(0x98968);
