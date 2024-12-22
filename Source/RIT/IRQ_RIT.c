@@ -9,10 +9,8 @@
 *********************************************************************************************************/
 #include "LPC17xx.h"
 #include "RIT.h"
-#include "../led/led.h"
-#include <stdio.h>
-#include "GLCD.h"
-#include "joystick/funct_joystick.h"
+#include "game/shared.h"
+#include "game/game.h"
 
 /******************************************************************************
 ** Function name:		RIT_IRQHandler
@@ -24,20 +22,35 @@
 **
 ******************************************************************************/
 
-void RIT_IRQHandler (void)
-{	
-	static uint32_t prev_joystick_state = (1 << 25);
+void RIT_IRQHandler (void){	
 	uint32_t joystick_state = LPC_GPIO1->FIOPIN & JOYSTICK_MASK;
-	
 	joystick_state = ~joystick_state & JOYSTICK_MASK;
-	/*
-		If no action selected perform the previos action
-	*/
+	
 	if(joystick_state == 0){
-		perform_action(prev_joystick_state);
+		curr_joystick_position = curr_joystick_position; // If no action selected perform the previos action
 	} else if (!(joystick_state & (joystick_state - 1))) {
-		perform_action(joystick_state);
-		prev_joystick_state = joystick_state;
+		switch (joystick_state) {
+        case (1 << 25): //SEL
+            //No action
+            break;
+        case (1 << 26): //DOWN
+						curr_joystick_position = DOWN;
+            break;
+        case (1 << 27): //LEFT
+						curr_joystick_position = LEFT;
+            break;
+        case (1 << 28):	//RIGHT
+						curr_joystick_position = RIGHT;
+            break;
+        case (1 << 29):	//UP
+            curr_joystick_position = UP;
+            break;
+        default:
+            //No action
+            break;
+    }
+	} else {
+		curr_joystick_position = NONE; //If more than one position is selected, ignore it. 
 	} 
 
   LPC_RIT->RICTRL |= 0x1;	/* clear interrupt flag */

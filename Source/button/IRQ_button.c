@@ -5,22 +5,19 @@
 #include "RIT/RIT.h"
 #include "timer/timer.h"
 
-extern bool pause; 
+#include "game/shared.h"
+#include "game/game.h"
 
 void EINT0_IRQHandler (void)	  	/* INT0														 */
 {		
-	if(pause == true){
-		GUI_Text(100, 190, (uint8_t *) "     ", Yellow, Blue);
-		enable_RIT();
-		enable_timer(0);
-		pause = false; 
+	if(current_game_state == PAUSE){
+		disable_interrupts();
+		current_game_state = START;
+		enable_interrupts();
 	} else {
-		GUI_Text(100, 190, (uint8_t *) "PAUSE", Yellow, Blue);
-		disable_RIT();
-		disable_timer(0);
-		reset_timer(0);
-		reset_RIT();
-		pause = true; 
+		disable_interrupts();
+		current_game_state = PAUSE;
+		enable_interrupts();
 	}
 	LPC_SC->EXTINT &= (1 << 0);     /* clear pending interrupt         */
 }

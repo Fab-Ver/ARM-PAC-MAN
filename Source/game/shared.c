@@ -1,4 +1,22 @@
 #include "config.h"
+#include <stdbool.h>
+ 
+typedef enum {PLAYING, START, PAUSE, GAME_OVER, VICTORY} game_state;
+volatile game_state current_game_state = PAUSE; 
+
+typedef enum {UP, DOWN, LEFT, RIGHT, NONE} joystick_position;
+volatile joystick_position curr_joystick_position = NONE; 
+
+volatile uint8_t lives = 1; 
+volatile uint8_t prev_lives = 0; 
+volatile uint16_t current_score = 0;
+volatile uint16_t prev_score = 1;
+
+volatile uint8_t pac_man_x = PAC_MAN_INITIAL_X; 
+volatile uint8_t pac_man_y = PAC_MAN_INITIAL_Y;
+
+volatile uint8_t prev_pac_man_x = PAC_MAN_INITIAL_X; 
+volatile uint8_t prev_pac_man_y = PAC_MAN_INITIAL_X;
 
 /** 
  * Game Map as 2d Matrix

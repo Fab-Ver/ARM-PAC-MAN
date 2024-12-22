@@ -21,13 +21,21 @@
 ******************************************************************************/
 void enable_timer( uint8_t timer_num )
 {
-  if ( timer_num == 0 )
-  {
-	LPC_TIM0->TCR = 1;
-  }
-  else
-  {
-	LPC_TIM1->TCR = 1;
+  switch (timer_num) {
+        case 0:
+            LPC_TIM0->TCR = 1;
+            break;
+        case 1:
+            LPC_TIM1->TCR = 1;
+            break;
+        case 2:
+            LPC_TIM2->TCR = 1;
+            break;
+        case 3:
+            LPC_TIM3->TCR = 1;
+            break;
+        default:
+            break;
   }
   return;
 }
@@ -43,13 +51,21 @@ void enable_timer( uint8_t timer_num )
 ******************************************************************************/
 void disable_timer( uint8_t timer_num )
 {
-  if ( timer_num == 0 )
-  {
-	LPC_TIM0->TCR = 0;
-  }
-  else
-  {
-	LPC_TIM1->TCR = 0;
+  switch (timer_num) {
+        case 0:
+            LPC_TIM0->TCR = 0;
+            break;
+        case 1:
+            LPC_TIM1->TCR = 0;
+            break;
+        case 2:
+            LPC_TIM2->TCR = 0;
+            break;
+        case 3:
+            LPC_TIM3->TCR = 0;
+            break;
+        default:
+            break;
   }
   return;
 }
@@ -67,27 +83,35 @@ void reset_timer( uint8_t timer_num )
 {
   uint32_t regVal;
 
-  if ( timer_num == 0 )
-  {
-	regVal = LPC_TIM0->TCR;
-	regVal |= 0x02;
-	LPC_TIM0->TCR = regVal;
-  }
-  else
-  {
-	regVal = LPC_TIM1->TCR;
-	regVal |= 0x02;
-	LPC_TIM1->TCR = regVal;
+  switch (timer_num) {
+        case 0:
+            regVal = LPC_TIM0->TCR;
+            regVal |= 0x02;
+            LPC_TIM0->TCR = regVal;
+            break;
+        case 1:
+            regVal = LPC_TIM1->TCR;
+            regVal |= 0x02;
+            LPC_TIM1->TCR = regVal;
+            break;
+        case 2:
+            regVal = LPC_TIM2->TCR;
+            regVal |= 0x02;
+            LPC_TIM2->TCR = regVal;
+            break;
+        case 3:
+            regVal = LPC_TIM3->TCR;
+            regVal |= 0x02;
+            LPC_TIM3->TCR = regVal;
+            break;
+        default:
+            break;
   }
   return;
 }
 
 uint32_t init_timer ( uint8_t timer_num, uint32_t TimerInterval )
 {
-  if ( timer_num == 0 )
-  {
-	LPC_TIM0->MR0 = TimerInterval;
-
 // <<< Use Configuration Wizard in Context Menu >>> 
 // <h> timer0 MCR
 //   <e.0> MR0I
@@ -138,21 +162,32 @@ uint32_t init_timer ( uint8_t timer_num, uint32_t TimerInterval )
 //	 <i> 1 Stop on MR3: the TC and PC will be stopped and TCR[3] will be set to 0 if MR3 matches the TC
 //	 <i> 0 Feature disabled.
 //   </e>
-	LPC_TIM0->MCR = 3;
 // </h>
 // <<< end of configuration section >>>    
-
-	NVIC_EnableIRQ(TIMER0_IRQn);
-	return (1);
-  }
-  else if ( timer_num == 1 )
-  {
-	LPC_TIM1->MR0 = TimerInterval;
-	LPC_TIM1->MCR = 3;				/* Interrupt and Reset on MR1 */
-
-	NVIC_EnableIRQ(TIMER1_IRQn);
-	return (1);
-  }
+	switch (timer_num) {
+        case 0:
+            LPC_TIM0->MR0 = TimerInterval;
+            LPC_TIM0->MCR = 3; /* Interrupt and Reset on MR0 */
+            NVIC_EnableIRQ(TIMER0_IRQn);
+            return 1;
+        case 1:
+            LPC_TIM1->MR0 = TimerInterval;
+            LPC_TIM1->MCR = 3; /* Interrupt and Reset on MR0 */
+            NVIC_EnableIRQ(TIMER1_IRQn);
+            return 1;
+        case 2:
+            LPC_TIM2->MR0 = TimerInterval;
+            LPC_TIM2->MCR = 3; /* Interrupt and Reset on MR0 */
+            NVIC_EnableIRQ(TIMER2_IRQn);
+            return 1;
+        case 3:
+            LPC_TIM3->MR0 = TimerInterval;
+            LPC_TIM3->MCR = 3; /* Interrupt and Reset on MR0 */
+            NVIC_EnableIRQ(TIMER3_IRQn);
+            return 1;
+        default:
+            return 0;
+    }
   return (0);
 }
 
