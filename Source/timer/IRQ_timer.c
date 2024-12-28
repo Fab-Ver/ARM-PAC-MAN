@@ -7,15 +7,11 @@
 ** Correlated files:    timer.h
 **--------------------------------------------------------------------------------------------------------
 *********************************************************************************************************/
-#include <string.h>
 #include "LPC17xx.h"
-#include "timer.h"
 #include "../GLCD/GLCD.h" 
-#include "../TouchPanel/TouchPanel.h"
 #include <stdio.h> /*for sprintf*/
 #include <string.h>
 #include "game/game.h"
-
 #include "game/config.h"
 #include "game/shared.h"
 

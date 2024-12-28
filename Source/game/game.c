@@ -301,13 +301,11 @@ void draw_in_square(uint8_t x, uint8_t y, uint8_t square_size, uint16_t color, u
 void disable_interrupts() {
     NVIC_DisableIRQ(TIMER2_IRQn);
     NVIC_DisableIRQ(TIMER0_IRQn);
-    //NVIC_DisableIRQ(RIT_IRQn);
     NVIC_DisableIRQ(EINT0_IRQn);
 }
 
 void enable_interrupts() {
     NVIC_EnableIRQ(TIMER2_IRQn);
     NVIC_EnableIRQ(TIMER0_IRQn);
-    //NVIC_EnableIRQ(RIT_IRQn);
     NVIC_EnableIRQ(EINT0_IRQn);
 }

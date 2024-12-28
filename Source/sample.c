@@ -21,9 +21,6 @@
 *********************************************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "LPC17xx.h"
 #include "GLCD/GLCD.h" 
 #include "TouchPanel/TouchPanel.h"
