@@ -24,8 +24,8 @@
 /**
  * Pills configuration 
  */
-#define MAX_PILLS 246
-#define STD_PILLS 240
+#define MAX_PILLS 240
+#define STD_PILLS 234
 #define POWER_PILLS 6
 #define STD_SCORE 10
 #define POWER_SCORE 50
