@@ -44,7 +44,7 @@ void draw_pac_man(uint8_t x_new, uint8_t y_new, uint8_t x_old, uint8_t y_old){
 	draw_in_square(x_new, y_new, SQUARE_SIZE, Yellow, pac_man_circle, true, true, x_old, y_old);
 }
 
-void generate_power_pills(){
+void generate_power_pill(){
 	uint8_t count = 0;
   Position pills_position[MAX_PILLS];
 	uint8_t xt, yt;
@@ -64,25 +64,23 @@ void generate_power_pills(){
 	
 	uint16_t position;
 	uint8_t pill_x, pill_y;
-  while (power_pills_count < POWER_PILLS) {
-		if (power_pills_count < count) {
-			position = random_number() % count;
-      pill_x = pills_position[position].x;
-      pill_y = pills_position[position].y;
-      if (pills[pill_y][pill_x] == 1) {
-				pills[pill_y][pill_x]++;
-        power_pills_count++;
-      }
-    }
-  }
+	
+	do{
+		position = random_number() % count;
+    pill_x = pills_position[position].x;
+    pill_y = pills_position[position].y;
+	} while(pills[pill_y][pill_x] != 1);
+	
+	pills[pill_y][pill_x] = 2;
+	draw_in_square(pill_x, pill_y, SQUARE_SIZE, Green, pill_circle, true, false, NULL, NULL);
 }
 
 void draw_pills(){
 		uint8_t x, y;
     for (y = 0; y < ROWS; y++) {
         for (x = 0; x < COLUMNS; x++) {
-            if (pills[y][x] == 1 || pills[y][x] == 2) {
-								draw_in_square(x, y, SQUARE_SIZE, pills[y][x] == 1 ? Red : Green, pill_circle, true, false, NULL, NULL);
+            if (pills[y][x] == 1) {
+								draw_in_square(x, y, SQUARE_SIZE, Red, pill_circle, true, false, NULL, NULL);
             }
         }
     }
@@ -120,7 +118,6 @@ void init_game(){
 	draw_pac_man(pac_man_x, pac_man_y, prev_pac_man_x, prev_pac_man_y);
 	update_stats();
 	seed = seed_with_adc_and_timer(); 
-	generate_power_pills();
 	draw_pills();
 }
 
@@ -241,10 +238,11 @@ void update_score(uint8_t new_x, uint8_t new_y){
 		pills[new_y][new_x] = 0;
 	}
 	if(next_life >= 1000){
+		prev_lives = lives;
 		lives++;
 		next_life-=1000;
 	}
-	if(current_score == (STD_PILLS*STD_SCORE)+(POWER_PILLS*POWER_SCORE)){
+	if(count_remaining_pills() == 0){
 		current_game_state = VICTORY;     
 	}
 }
@@ -296,6 +294,19 @@ void draw_in_square(uint8_t x, uint8_t y, uint8_t square_size, uint16_t color, u
 		 }
    }
   }
+}
+
+uint8_t count_remaining_pills(){
+	uint8_t x, y;
+	uint8_t remaining = 0;
+  for (y = 0; y < ROWS; y++) {
+   for (x = 0; x < COLUMNS; x++) {
+    if (pills[y][x] == 1 || pills[y][x] == 2) {
+      remaining++;
+    }
+   }
+  }
+	return remaining;
 }
 
 void disable_interrupts() {

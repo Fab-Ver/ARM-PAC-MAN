@@ -26,18 +26,33 @@
 ******************************************************************************/
 
 uint8_t second = 60;
+uint16_t elapsed_time = 0;			// Tracks total elapsed seconds
+uint8_t power_pill_count = 0;      // Counter for power pills
+uint16_t next_pill_time = 0;        // Time for the next power pill generation         
 
 void TIMER0_IRQHandler (void)
 {
 	second--;
+	elapsed_time++;
+	
 	char str[20];
   snprintf((char *)str, sizeof(str), "%d", second);
 	GUI_Text(10, 30, (uint8_t *) "   ", Black, Black);
 	GUI_Text(10, 30, (uint8_t *) strcat(str, "s"), White, Black);
+	
 	disable_interrupts();
 	update_stats();
 	draw_lives();
 	enable_interrupts();
+	
+	if (elapsed_time >= next_pill_time && power_pill_count < POWER_PILLS) {
+		disable_interrupts();
+        generate_power_pill(); // Generate a power pill
+		enable_interrupts();
+		power_pill_count++;
+        next_pill_time = elapsed_time + (random_number() % 10 + 1); // Random interval: 1-10 seconds
+  }
+	
 	if(second == 0){
 		disable_interrupts();
 		prev_lives = lives;
@@ -45,7 +60,7 @@ void TIMER0_IRQHandler (void)
 		enable_interrupts();
 		second = 60;
 		if(lives == 0){
-			if(current_score == (STD_PILLS*STD_SCORE)+(POWER_PILLS*POWER_SCORE)){
+			if(count_remaining_pills() == 0){
 				current_game_state = VICTORY;      
 			} else {
 				current_game_state = GAME_OVER; 

@@ -95,7 +95,18 @@ void update_score(uint8_t new_x, uint8_t new_y);
  */
 void update_stats();
 
+/**
+ * Checks how many pills are left in the map
+ */
+uint8_t count_remaining_pills();
+
+/**
+ * Generates a power pill in a random position between the remaining standard pills
+ */
+void generate_power_pill();
+
 void enable_interrupts();
 void disable_interrupts(); 
+uint32_t random_number();
 
 #endif 
