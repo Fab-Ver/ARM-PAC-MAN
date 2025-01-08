@@ -13,11 +13,6 @@ uint16_t next_life = 0;
 uint32_t seed_with_adc_and_timer();
 
 /**
- * Generates a random number given the seed (using Linear Congruential Generator). 
- */
-uint32_t random_number();
-
-/**
  * Draws the figure specified by filter inside a square_size*square_size square. 
  */
 void draw_in_square(uint8_t x, uint8_t y, uint8_t square_size, uint16_t color, uint8_t filter[square_size][square_size], bool scale, bool deleteOld, uint8_t old_x, uint8_t old_y);

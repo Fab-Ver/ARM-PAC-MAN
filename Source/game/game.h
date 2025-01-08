@@ -105,8 +105,19 @@ uint8_t count_remaining_pills();
  */
 void generate_power_pill();
 
+/**
+ * Enable all useful interrupts. 
+ */
 void enable_interrupts();
+
+/**
+ * Disable all useful interrupts. 
+ */
 void disable_interrupts(); 
+
+/**
+ * Generates a random number given the seed (using Linear Congruential Generator). 
+ */
 uint32_t random_number();
 
 #endif 
