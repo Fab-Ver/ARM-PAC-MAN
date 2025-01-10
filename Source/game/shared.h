@@ -4,15 +4,34 @@
 #include "config.h"
 #include <stdbool.h>
 
-extern volatile uint8_t lives;
-extern volatile uint8_t prev_lives;
 extern volatile uint16_t current_score;
 extern volatile uint16_t prev_score;
 
-extern volatile uint8_t pac_man_x; 
-extern volatile uint8_t pac_man_y;
-extern volatile uint8_t prev_pac_man_x; 
-extern volatile uint8_t prev_pac_man_y;
+typedef struct {
+    uint8_t x; 
+    uint8_t y; 
+		uint8_t prev_x; 
+    uint8_t prev_y; 
+	  uint8_t lives; 
+		uint8_t prev_lives; 
+} PacMan;
+
+extern volatile PacMan pac_man;
+
+typedef enum {CHASE, FRIGHTENED} GhostState;
+
+typedef struct {
+    uint8_t x; 
+    uint8_t y; 
+		uint8_t prev_x; 
+    uint8_t prev_y; 
+    GhostState state; 
+    bool isAlive; 
+} Ghost;
+
+extern volatile Ghost blinky;
+
+extern bool power_pill_active;
 
 typedef enum {PLAYING, START, PAUSE, GAME_OVER, VICTORY} game_state;
 extern volatile game_state current_game_state;

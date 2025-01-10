@@ -7,16 +7,35 @@ volatile game_state current_game_state = PAUSE;
 typedef enum {UP, DOWN, LEFT, RIGHT, NONE} joystick_position;
 volatile joystick_position curr_joystick_position = NONE; 
 
-volatile uint8_t lives = 1; 
-volatile uint8_t prev_lives = 0; 
+
 volatile uint16_t current_score = 0;
 volatile uint16_t prev_score = 1;
 
-volatile uint8_t pac_man_x = PAC_MAN_INITIAL_X; 
-volatile uint8_t pac_man_y = PAC_MAN_INITIAL_Y;
+typedef struct {
+    uint8_t x; 
+    uint8_t y; 
+		uint8_t prev_x; 
+    uint8_t prev_y; 
+	  uint8_t lives; 
+		uint8_t prev_lives; 
+} PacMan;
 
-volatile uint8_t prev_pac_man_x = PAC_MAN_INITIAL_X; 
-volatile uint8_t prev_pac_man_y = PAC_MAN_INITIAL_X;
+volatile PacMan pac_man = { .x = PAC_MAN_INITIAL_X, .y = PAC_MAN_INITIAL_Y, .prev_x = 10, .prev_y = 11, .lives = 1, .prev_lives = 0 };
+
+typedef enum {CHASE, FRIGHTENED} GhostState;
+
+typedef struct {
+    uint8_t x; 
+    uint8_t y; 
+		uint8_t prev_x; 
+    uint8_t prev_y; 
+    GhostState state; 
+    bool isAlive; 
+} Ghost;
+
+volatile Ghost blinky = { .x = BLINKY_INITIAL_X, .y = BLINKY_INITIAL_Y, .prev_x = 10, .prev_y = 11, .state = CHASE, .isAlive = true };
+
+bool power_pill_active = false;
 
 /** 
  * Game Map as 2d Matrix
@@ -32,7 +51,7 @@ uint8_t map[ROWS][COLUMNS] = {
     {1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1}, // Row 8
     {1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1}, // Row 9
     {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1}, // Row 10
-    {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1}, // Row 11
+    {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1}, // Row 11
     {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, // Row 12
     {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1}, // Row 13
     {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1}, // Row 14
