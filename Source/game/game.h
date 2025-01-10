@@ -41,6 +41,11 @@ void generate_power_pills();
 void draw_pac_man(uint8_t x_new, uint8_t y_new, uint8_t x_old, uint8_t y_old);
 
 /**
+ * Draws BLINKY current position
+ */
+void draw_blinky(uint8_t x_new, uint8_t y_new, uint8_t x_old, uint8_t y_old);
+
+/**
  * Draws current lives 
  */
 void draw_lives();
@@ -68,12 +73,27 @@ void start();
 /**
  * Moves pac-man, if any joystick position is available   
  */
-void move(joystick_position curr_joystick_position);
+void move_pac_man(joystick_position curr_joystick_position);
+
+/**
+ * Moves ghost according to ghost state and position of pacman 
+ */
+void move_ghost();
+
+/**
+ * Compute the distance between to points
+ */
+uint8_t get_distance(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
 
 /**
  * Checks if a movement leads to a collision with the map  
  */
 bool check_map_collision(uint8_t x, uint8_t y);
+
+/**
+ * Checks if pac-man and blinky are in the same position  
+ */
+void check_collision();
 
 /**
  * Checks if pac-man can teleport left or right 
@@ -119,5 +139,20 @@ void disable_interrupts();
  * Generates a random number given the seed (using Linear Congruential Generator). 
  */
 uint32_t random_number();
+
+/**
+ * Checks if the game is in GAME-OVER or VICTORY state after lives decrement.  
+ */
+void check_game_status();
+
+/**
+ * Compute ghost new position using A* algorithm given a target position. 
+ */
+bool a_star_search(int startX, int startY, int targetX, int targetY, int *nextX, int *nextY);
+
+/**
+ * Check if the ghost can perform a given move (no teleport allowed)
+ */
+bool valid_move(uint8_t x, uint8_t y);
 
 #endif 
