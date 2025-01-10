@@ -28,7 +28,12 @@
 uint8_t second = 60;
 uint16_t elapsed_time = 0;			// Tracks total elapsed seconds
 uint8_t power_pill_count = 0;      // Counter for power pills
-uint16_t next_pill_time = 0;        // Time for the next power pill generation         
+uint16_t next_pill_time = 0;        // Time for the next power pill generation  
+
+bool local_power_pill_active;
+bool local_blinky_alive; 
+uint8_t power_pill_timer = 0;
+uint8_t blinky_respawn_timer = 0;
 
 void TIMER0_IRQHandler (void)
 {
@@ -43,29 +48,51 @@ void TIMER0_IRQHandler (void)
 	disable_interrupts();
 	update_stats();
 	draw_lives();
+	local_power_pill_active = power_pill_active;
+	local_blinky_alive = blinky.isAlive;
 	enable_interrupts();
 	
 	if (elapsed_time >= next_pill_time && power_pill_count < POWER_PILLS) {
 		disable_interrupts();
-        generate_power_pill(); // Generate a power pill
+    generate_power_pill(); // Generate a power pill
 		enable_interrupts();
 		power_pill_count++;
-        next_pill_time = elapsed_time + (random_number() % 10 + 1); // Random interval: 1-10 seconds
+    next_pill_time = elapsed_time + (random_number() % 10 + 1); // Random interval: 1-10 seconds
   }
+	
+	if(local_power_pill_active){
+		power_pill_timer++;
+		if(power_pill_timer > POWER_PILL_DURATION){
+			disable_interrupts();
+			power_pill_active = false;
+			power_pill_timer = 0;
+			blinky.state = CHASE;
+			enable_interrupts();
+		}
+	}
+	
+	if(!local_blinky_alive){
+		blinky_respawn_timer++;
+		if(blinky_respawn_timer > GHOST_RESPAWN_TIME){
+			disable_interrupts();
+			blinky.isAlive = true;
+			blinky.x = BLINKY_INITIAL_X;
+			blinky.y = BLINKY_INITIAL_Y;
+			blinky.prev_x = 10;
+			blinky.prev_y = 11;
+			blinky.state = CHASE;
+			blinky_respawn_timer = 0;
+			enable_interrupts();
+		}
+	}
 	
 	if(second == 0){
 		disable_interrupts();
-		prev_lives = lives;
-		lives--;
-		enable_interrupts();
+		pac_man.prev_lives = pac_man.lives;
+		pac_man.lives--;
 		second = 60;
-		if(lives == 0){
-			if(count_remaining_pills() == 0){
-				current_game_state = VICTORY;      
-			} else {
-				current_game_state = GAME_OVER; 
-			}
-		}
+		check_game_status();
+		enable_interrupts();
 	}
 
   LPC_TIM0->IR = 1;			/* clear interrupt flag */
@@ -93,16 +120,11 @@ void TIMER2_IRQHandler (void)
 	uint8_t local_lives; 
 	game_state local_current_game_state;
 	joystick_position local_curr_joystick_position;
-	uint8_t local_pac_man_x; 
-	uint8_t local_pac_man_y; 
-	uint8_t local_prev_pac_man_x; 
-	uint8_t local_prev_pac_man_y; 
-	uint8_t local_current_score;  
 	
 	disable_interrupts();
-	local_lives = lives; 
 	local_current_game_state = current_game_state; 
 	local_curr_joystick_position = curr_joystick_position; 
+	local_blinky_alive = blinky.isAlive;
 	enable_interrupts();
 		
 	
@@ -123,15 +145,17 @@ void TIMER2_IRQHandler (void)
 				pause();
 				break;
 			case PLAYING:
+				move_pac_man(local_curr_joystick_position);
+				if(local_blinky_alive){
+					move_ghost();
+					disable_interrupts();
+					draw_blinky(blinky.x, blinky.y, blinky.prev_x, blinky.prev_y);
+					enable_interrupts();
+				}
 				disable_interrupts();
-				move(local_curr_joystick_position);
-				local_pac_man_x = pac_man_x; 
-				local_pac_man_y = pac_man_y; 
-				local_prev_pac_man_x = prev_pac_man_x; 
-				local_prev_pac_man_y = prev_pac_man_y; 
-				local_current_score = current_score; 
+				draw_pac_man(pac_man.x, pac_man.y, pac_man.prev_x, pac_man.prev_y);
 				enable_interrupts();
-				draw_pac_man(local_pac_man_x, local_pac_man_y, local_prev_pac_man_x, local_prev_pac_man_y);
+				check_collision();
 				break;
 		}
   LPC_TIM2->IR = 1;			/* clear interrupt flag */
