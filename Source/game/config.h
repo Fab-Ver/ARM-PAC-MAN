@@ -29,6 +29,7 @@
 #define POWER_PILLS 6
 #define STD_SCORE 10
 #define POWER_SCORE 50
+#define GHOST_SCORE 100
 
 /**
  * Variables used for random seed generation
@@ -45,6 +46,12 @@
 
 #define PAC_MAN_INITIAL_X 11
 #define PAC_MAN_INITIAL_Y 18
+
+#define BLINKY_INITIAL_X 11
+#define BLINKY_INITIAL_Y 11
+
+#define POWER_PILL_DURATION 10
+#define GHOST_RESPAWN_TIME 3 
 
 #define TIMER0_PRIORITY   1  // Highest priority for game countdown
 #define TIMER1_PRIORITY   3  // Random number generation (initial seed, lower priority)
