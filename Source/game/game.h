@@ -26,26 +26,6 @@ void init_game();
 void draw_map();
 
 /**
- * Draws standard pills on the map
- */
-void draw_pills();
-
-/**
- * Draws standard pills on the map
- */
-void generate_power_pills();
-
-/**
- * Draws PAC-MAN current position
- */
-void draw_pac_man(uint8_t x_new, uint8_t y_new, uint8_t x_old, uint8_t y_old);
-
-/**
- * Draws BLINKY current position
- */
-void draw_blinky(uint8_t x_new, uint8_t y_new, uint8_t x_old, uint8_t y_old);
-
-/**
  * Draws current lives 
  */
 void draw_lives();
@@ -63,7 +43,7 @@ void game_over();
 /**
  * Set PAUSE state 
  */
-void pause();
+void pause_game();
 
 /**
  * Starts the game (unpause)  
@@ -71,39 +51,14 @@ void pause();
 void start();
 
 /**
- * Moves pac-man, if any joystick position is available   
- */
-void move_pac_man(joystick_position curr_joystick_position);
-
-/**
- * Moves ghost according to ghost state and position of pacman 
- */
-void move_ghost();
-
-/**
- * Compute the distance between to points
- */
-uint8_t get_distance(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
-
-/**
  * Checks if a movement leads to a collision with the map  
  */
 bool check_map_collision(uint8_t x, uint8_t y);
 
 /**
- * Checks if pac-man and blinky are in the same position  
- */
-void check_collision();
-
-/**
  * Checks if pac-man can teleport left or right 
  */
 bool check_teleport(uint8_t x, uint8_t y);
-
-/**
- * Update pac-man position according to the specified new coordinates.  
- */
-void update_pac_man_position(uint8_t new_x, uint8_t new_y);
 
 /**
  * Update the score, if pac-man eats any pills.  
@@ -146,13 +101,17 @@ uint32_t random_number();
 void check_game_status();
 
 /**
- * Compute ghost new position using A* algorithm given a target position. 
+ * Draws the figure specified by filter inside a square_size*square_size square. 
  */
-bool a_star_search(int startX, int startY, int targetX, int targetY, int *nextX, int *nextY);
+void draw_in_square(uint8_t x, uint8_t y, uint8_t square_size, uint16_t color, uint8_t filter[square_size][square_size]);
 
 /**
- * Check if the ghost can perform a given move (no teleport allowed)
+ * Draws the current countdown 
  */
-bool valid_move(uint8_t x, uint8_t y);
+void draw_countdown();
 
+/*
+	Generates a seed for pseudo-random number generation using TIMER 1 and ADC 
+*/
+uint32_t seed_with_adc_and_timer();
 #endif 

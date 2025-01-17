@@ -750,6 +750,36 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>pacman</GroupName>
+          <Files>
+            <File>
+              <FileName>pacman.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\pacman\pacman.c</FilePath>
+            </File>
+            <File>
+              <FileName>pacman.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\pacman\pacman.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ghost</GroupName>
+          <Files>
+            <File>
+              <FileName>ghost.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\ghost\ghost.c</FilePath>
+            </File>
+            <File>
+              <FileName>ghost.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\ghost\ghost.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
@@ -1443,6 +1473,36 @@
               <FileName>shared.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Source\game\shared.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>pacman</GroupName>
+          <Files>
+            <File>
+              <FileName>pacman.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\pacman\pacman.c</FilePath>
+            </File>
+            <File>
+              <FileName>pacman.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\pacman\pacman.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ghost</GroupName>
+          <Files>
+            <File>
+              <FileName>ghost.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\ghost\ghost.c</FilePath>
+            </File>
+            <File>
+              <FileName>ghost.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\ghost\ghost.h</FilePath>
             </File>
           </Files>
         </Group>

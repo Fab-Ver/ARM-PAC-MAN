@@ -14,6 +14,8 @@
 #include "game/game.h"
 #include "game/config.h"
 #include "game/shared.h"
+#include "ghost/ghost.h"
+#include "pacman/pacman.h"
 
 /******************************************************************************
 ** Function name:		Timer0_IRQHandler
@@ -25,72 +27,66 @@
 **
 ******************************************************************************/
 
-uint8_t second = 60;
 uint16_t elapsed_time = 0;			// Tracks total elapsed seconds
-uint8_t power_pill_count = 0;      // Counter for power pills
-uint16_t next_pill_time = 0;        // Time for the next power pill generation  
+volatile uint16_t next_pill_time = 0;        // Time for the next power pill generation  
 
-bool local_power_pill_active;
-bool local_blinky_alive; 
-uint8_t power_pill_timer = 0;
-uint8_t blinky_respawn_timer = 0;
+volatile uint8_t power_pill_timer = 0;
+volatile uint8_t ghost_respawn_timer = 0;
+
+volatile uint8_t ghost_speed = GHOST_INITIAL_SPEED;
+volatile uint8_t cycle_counter = 0; 
+volatile uint16_t freq_counter = 0; 
 
 void TIMER0_IRQHandler (void)
 {
-	second--;
+	static uint8_t power_pill_generated = 0;  
+	countdown--;
 	elapsed_time++;
 	
-	char str[20];
-  snprintf((char *)str, sizeof(str), "%d", second);
-	GUI_Text(10, 30, (uint8_t *) "   ", Black, Black);
-	GUI_Text(10, 30, (uint8_t *) strcat(str, "s"), White, Black);
-	
 	disable_interrupts();
-	update_stats();
 	draw_lives();
-	local_power_pill_active = power_pill_active;
-	local_blinky_alive = blinky.isAlive;
+	draw_countdown();
+	update_stats();
 	enable_interrupts();
 	
-	if (elapsed_time >= next_pill_time && power_pill_count < POWER_PILLS) {
+	if (elapsed_time >= next_pill_time && power_pill_generated < POWER_PILLS) {
 		disable_interrupts();
     generate_power_pill(); // Generate a power pill
+		power_pill_generated++;
 		enable_interrupts();
-		power_pill_count++;
-    next_pill_time = elapsed_time + (random_number() % 10 + 1); // Random interval: 1-10 seconds
+		next_pill_time = elapsed_time + (random_number() % 10 + 1); // Random interval: 1-10 seconds
   }
 	
-	if(local_power_pill_active){
+	if(power_pill_active){
 		power_pill_timer++;
 		if(power_pill_timer > POWER_PILL_DURATION){
 			disable_interrupts();
 			power_pill_active = false;
 			power_pill_timer = 0;
-			blinky.state = CHASE;
+			ghost_state = CHASE;
 			enable_interrupts();
 		}
 	}
 	
-	if(!local_blinky_alive){
-		blinky_respawn_timer++;
-		if(blinky_respawn_timer > GHOST_RESPAWN_TIME){
+	if(!ghost_is_alive){
+		ghost_respawn_timer++;
+		if(ghost_respawn_timer > GHOST_RESPAWN_TIME){
 			disable_interrupts();
-			blinky.isAlive = true;
-			blinky.x = BLINKY_INITIAL_X;
-			blinky.y = BLINKY_INITIAL_Y;
-			blinky.prev_x = 10;
-			blinky.prev_y = 11;
-			blinky.state = CHASE;
-			blinky_respawn_timer = 0;
+			ghost_is_alive = true;
+			ghost_x = GHOST_INITIAL_X;
+			ghost_y = GHOST_INITIAL_Y;
+			draw_ghost();
+			ghost_state = CHASE;
+			ghost_respawn_timer = 0;
 			enable_interrupts();
 		}
 	}
 	
-	if(second == 0){
+	if(countdown == 0){
 		disable_interrupts();
-		pac_man.prev_lives = pac_man.lives;
-		pac_man.lives--;
-		second = 60;
+		prev_lives = lives;
+		lives--;
+		countdown = 60;
 		check_game_status();
 		enable_interrupts();
 	}
@@ -117,18 +113,7 @@ void TIMER1_IRQHandler (void)
 
 void TIMER2_IRQHandler (void)
 {
-	uint8_t local_lives; 
-	game_state local_current_game_state;
-	joystick_position local_curr_joystick_position;
-	
-	disable_interrupts();
-	local_current_game_state = current_game_state; 
-	local_curr_joystick_position = curr_joystick_position; 
-	local_blinky_alive = blinky.isAlive;
-	enable_interrupts();
-		
-	
-	switch(local_current_game_state){
+	switch(current_game_state){
 			case GAME_OVER:
 				game_over();
 				break;
@@ -142,19 +127,20 @@ void TIMER2_IRQHandler (void)
 				enable_interrupts();
 				break;
 			case PAUSE:
-				pause();
+				pause_game();
 				break;
 			case PLAYING:
-				move_pac_man(local_curr_joystick_position);
-				if(local_blinky_alive){
+				cycle_counter++;
+				
+				move_pac_man(curr_joystick_position);
+				if(ghost_is_alive && cycle_counter >= ghost_speed){
+					freq_counter++;
 					move_ghost();
-					disable_interrupts();
-					draw_blinky(blinky.x, blinky.y, blinky.prev_x, blinky.prev_y);
-					enable_interrupts();
+					cycle_counter = 0; 
+					if(freq_counter >= SPEED_INCREASE_FREQ){
+						ghost_speed = ghost_speed == 0 ? ((uint8_t) GHOST_INITIAL_SPEED / 3 ) : (ghost_speed - 1); 
+					}
 				}
-				disable_interrupts();
-				draw_pac_man(pac_man.x, pac_man.y, pac_man.prev_x, pac_man.prev_y);
-				enable_interrupts();
 				check_collision();
 				break;
 		}

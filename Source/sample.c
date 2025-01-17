@@ -58,13 +58,14 @@ int main(void){
 	NVIC_SetPriority(TIMER2_IRQn, TIMER2_PRIORITY);
 	
 	
-	BUTTON_init();
   LCD_Initialization();
 	joystick_init();
 	
 	init_game();
 	
 	enable_timer(2);
+	BUTTON_init();
+	
 	disable_timer(1); //After seed generation, no more needed. 	
 	
 	LPC_SC->PCON |= 0x1;									/* power-down	mode										*/
