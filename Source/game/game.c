@@ -3,6 +3,7 @@
 #include "stdbool.h"
 #include "ghost/ghost.h"
 #include "pacman/pacman.h"
+#include "CAN/CAN.h"
 
 uint32_t seed;
 uint16_t next_life = 0;
@@ -129,14 +130,14 @@ bool check_teleport(uint8_t x, uint8_t y){
 void update_score(uint8_t new_x, uint8_t new_y){
 	if(map[new_y][new_x] == 2){
 		disable_interrupts();
-		prev_score = score;
+		//prev_score = score;
 		score += (uint16_t) STD_SCORE;
 		next_life+=STD_SCORE;
 		map[new_y][new_x] = 0;
 		enable_interrupts();
 	} else if (map[new_y][new_x] == 3){
 		disable_interrupts();
-		prev_score = score;
+		//prev_score = score;
 		score += (uint16_t) POWER_SCORE;
 		next_life+=POWER_SCORE;
 		map[new_y][new_x] = 0;
@@ -146,7 +147,7 @@ void update_score(uint8_t new_x, uint8_t new_y){
 	}
 	if(next_life >= 1000){
 		disable_interrupts();
-		prev_lives = lives;
+		//prev_lives = lives;
 		lives++;
 		next_life-=1000;
 		enable_interrupts();
@@ -244,4 +245,16 @@ void check_game_status(){
 		}
 	}
 	enable_interrupts();
+}
+
+void CAN_update_stats(uint8_t countdown, uint8_t lives, uint16_t score){
+		CAN_TxMsg.data[0] = (char) score;
+		CAN_TxMsg.data[1] = (char) (score & 0xFF00) >> 8;
+		CAN_TxMsg.data[2] = (char)lives;
+		CAN_TxMsg.data[3] = (char) countdown;
+		CAN_TxMsg.len = 4;
+		CAN_TxMsg.id = 2;
+		CAN_TxMsg.format = STANDARD_FORMAT;
+		CAN_TxMsg.type = DATA_FRAME;
+		CAN_wrMsg(1, &CAN_TxMsg);
 }

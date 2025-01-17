@@ -114,4 +114,9 @@ void draw_countdown();
 	Generates a seed for pseudo-random number generation using TIMER 1 and ADC 
 */
 uint32_t seed_with_adc_and_timer();
+
+/**
+ * Function to send CAN message to update the lcd 
+ */
+void CAN_update_stats(uint8_t countdown, uint8_t lives, uint16_t score);
 #endif 

@@ -10,6 +10,7 @@ volatile joystick_position curr_joystick_position = NONE;
 volatile int16_t score = 0;
 volatile int16_t prev_score = 1;
 volatile uint8_t countdown = 60;
+volatile uint8_t prev_countdown = 61;
 volatile uint8_t lives = 1; 
 volatile uint8_t prev_lives = 0;
 volatile bool power_pill_active = false;

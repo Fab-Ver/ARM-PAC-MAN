@@ -633,6 +633,11 @@
           <GroupName>CAN</GroupName>
           <Files>
             <File>
+              <FileName>CAN.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\CAN\CAN.h</FilePath>
+            </File>
+            <File>
               <FileName>IRQ_CAN.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Source\CAN\IRQ_CAN.c</FilePath>
@@ -1359,6 +1364,11 @@
         <Group>
           <GroupName>CAN</GroupName>
           <Files>
+            <File>
+              <FileName>CAN.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Source\CAN\CAN.h</FilePath>
+            </File>
             <File>
               <FileName>IRQ_CAN.c</FileName>
               <FileType>1</FileType>

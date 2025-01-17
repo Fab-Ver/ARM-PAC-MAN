@@ -310,4 +310,8 @@ void CAN_Init (void) {
   CAN_waitReady (2);                              /* wait til tx mbx is empty */
 }
 
+void CAN_disable_IRQ(){
+	NVIC_DisableIRQ(CAN_IRQn);
+}
+
 

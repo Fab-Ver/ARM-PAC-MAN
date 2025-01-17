@@ -30,6 +30,7 @@
 #include "RIT/RIT.h"
 #include "joystick/joystick.h"
 #include "game/shared.h"
+#include "CAN/CAN.h"
 
 
 #ifdef SIMULATOR
@@ -57,7 +58,9 @@ int main(void){
 	init_timer(2, 0x2625A0);
 	NVIC_SetPriority(TIMER2_IRQn, TIMER2_PRIORITY);
 	
+	NVIC_SetPriority(CAN_IRQn,2);
 	
+	CAN_Init(); 
   LCD_Initialization();
 	joystick_init();
 	

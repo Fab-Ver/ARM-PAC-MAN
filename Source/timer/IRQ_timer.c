@@ -44,9 +44,11 @@ void TIMER0_IRQHandler (void)
 	elapsed_time++;
 	
 	disable_interrupts();
-	draw_lives();
-	draw_countdown();
-	update_stats();
+	//Un-comment if CAN not used
+	//draw_lives();
+	//draw_countdown();
+	//update_stats();
+	CAN_update_stats(countdown, lives, score);
 	enable_interrupts();
 	
 	if (elapsed_time >= next_pill_time && power_pill_generated < POWER_PILLS) {
@@ -72,6 +74,7 @@ void TIMER0_IRQHandler (void)
 		ghost_respawn_timer++;
 		if(ghost_respawn_timer > GHOST_RESPAWN_TIME){
 			disable_interrupts();
+			ghost_speed = GHOST_INITIAL_SPEED;
 			ghost_is_alive = true;
 			ghost_x = GHOST_INITIAL_X;
 			ghost_y = GHOST_INITIAL_Y;
@@ -84,7 +87,7 @@ void TIMER0_IRQHandler (void)
 	
 	if(countdown == 0){
 		disable_interrupts();
-		prev_lives = lives;
+		//prev_lives = lives;
 		lives--;
 		countdown = 60;
 		check_game_status();

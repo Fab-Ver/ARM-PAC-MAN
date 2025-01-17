@@ -7,6 +7,7 @@
 extern volatile uint16_t score;
 extern volatile uint16_t prev_score;
 extern volatile uint8_t countdown;
+extern volatile uint8_t prev_countdown;
 extern volatile uint8_t lives; 
 extern volatile uint8_t prev_lives;
 extern volatile power_pill_active;
