@@ -1,6 +1,7 @@
 #ifndef MUSIC_H
 #define MUSIC_H
 
+#include "LPC17xx.h"
 
 //Default: 1.65
 #define SPEEDUP 1.6
@@ -56,8 +57,18 @@ typedef struct
 	NOTE_DURATION duration;
 } NOTE;
 
+typedef enum song_id{
+	PILL,
+	POWER, 
+	LIFE,
+	KILL_GHOST
+} Song; 
+
 void playNote(NOTE note);
 BOOL isNotePlaying(void);
+void playSong();
+void changeSong(Song song_id);
+void init_music();
 
 #endif
 /* EOF */

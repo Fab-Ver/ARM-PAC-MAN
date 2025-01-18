@@ -56,14 +56,13 @@ void check_collision(){
 	if (pac_man_x == ghost_x && pac_man_y == ghost_y) {
 		if (ghost_state == FRIGHTENED) {
 			disable_interrupts();
-			//prev_score = score;
 			score += (uint16_t) GHOST_SCORE;
       ghost_is_alive = false;
 			clear_ghost(); 
+			changeSong(KILL_GHOST);
 			enable_interrupts();
 		} else {
 			disable_interrupts();
-			//prev_lives= lives; 
       lives--;
 			check_game_status();
 			draw_lives();

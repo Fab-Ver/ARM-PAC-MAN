@@ -11,6 +11,7 @@
 #include "RIT.h"
 #include "game/shared.h"
 #include "game/game.h"
+#include "music/music.h"
 
 /******************************************************************************
 ** Function name:		RIT_IRQHandler
@@ -21,8 +22,20 @@
 ** Returned value:		None
 **
 ******************************************************************************/
+#define RIT_SEMIMINIMA 8
+#define RIT_MINIMA 16
+#define RIT_INTERA 32
+#define UPTICKS 1
 
 void RIT_IRQHandler (void){	
+	static int ticks = 0; 
+	if(!isNotePlaying()){
+		++ticks; 
+		if(ticks == UPTICKS){
+			ticks = 0;
+			playSong();
+		}
+	}
 	uint32_t joystick_state = LPC_GPIO1->FIOPIN & JOYSTICK_MASK;
 	joystick_state = ~joystick_state & JOYSTICK_MASK;
 	

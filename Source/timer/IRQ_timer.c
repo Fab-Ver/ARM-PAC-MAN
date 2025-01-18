@@ -37,6 +37,15 @@ volatile uint8_t ghost_speed = GHOST_INITIAL_SPEED;
 volatile uint8_t cycle_counter = 0; 
 volatile uint16_t freq_counter = 0; 
 
+uint16_t SinTable[45] =  
+{
+    410, 467, 523, 576, 627, 673, 714, 749, 778,
+    799, 813, 819, 817, 807, 789, 764, 732, 694, 
+    650, 602, 550, 495, 438, 381, 324, 270, 217,
+    169, 125, 87 , 55 , 30 , 12 , 2  , 0  , 6  ,   
+    20 , 41 , 70 , 105, 146, 193, 243, 297, 353
+};
+
 void TIMER0_IRQHandler (void)
 {
 	static uint8_t power_pill_generated = 0;  
@@ -87,7 +96,6 @@ void TIMER0_IRQHandler (void)
 	
 	if(countdown == 0){
 		disable_interrupts();
-		//prev_lives = lives;
 		lives--;
 		countdown = 60;
 		check_game_status();
@@ -110,6 +118,17 @@ void TIMER0_IRQHandler (void)
 ******************************************************************************/
 void TIMER1_IRQHandler (void)
 {
+	static int sineticks=0;
+	/* DAC management */	
+	static int currentValue; 
+	currentValue = SinTable[sineticks];
+	currentValue -= 410;
+	currentValue /= 1;
+	currentValue += 410;
+	LPC_DAC->DACR = currentValue <<6;
+	sineticks++;
+	if(sineticks==45) sineticks=0;
+	
   LPC_TIM1->IR = 1;			/* clear interrupt flag */
   return;
 }
@@ -153,6 +172,7 @@ void TIMER2_IRQHandler (void)
 
 void TIMER3_IRQHandler (void)
 {
+	disable_timer(1);
   LPC_TIM3->IR = 1;			/* clear interrupt flag */
   return;
 }

@@ -31,6 +31,8 @@
 #include "joystick/joystick.h"
 #include "game/shared.h"
 #include "CAN/CAN.h"
+#include "adc/adc.h"
+#include "music/music.h"
 
 
 #ifdef SIMULATOR
@@ -59,17 +61,27 @@ int main(void){
 	NVIC_SetPriority(TIMER2_IRQn, TIMER2_PRIORITY);
 	
 	NVIC_SetPriority(CAN_IRQn,2);
+	NVIC_SetPriority(TIMER3_IRQn, 2);
+	NVIC_SetPriority(TIMER1_IRQn, 2);
 	
 	CAN_Init(); 
   LCD_Initialization();
 	joystick_init();
+	init_music(); 
 	
 	init_game();
+	disable_timer(1); //After seed generation, no more needed. 	
 	
 	enable_timer(2);
 	BUTTON_init();
+	ADC_init(); 
 	
-	disable_timer(1); //After seed generation, no more needed. 	
+	/*Speaker*/
+	LPC_PINCON->PINSEL1 |= (1<<21);
+	LPC_PINCON->PINSEL1 &= ~(1<<20);
+	LPC_GPIO0->FIODIR |= (1<<26);
+	
+	
 	
 	LPC_SC->PCON |= 0x1;									/* power-down	mode										*/
 	LPC_SC->PCON &= ~(0x2);

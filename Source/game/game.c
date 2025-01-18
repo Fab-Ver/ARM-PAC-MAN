@@ -4,6 +4,7 @@
 #include "ghost/ghost.h"
 #include "pacman/pacman.h"
 #include "CAN/CAN.h"
+#include "music/music.h"
 
 uint32_t seed;
 uint16_t next_life = 0;
@@ -91,8 +92,13 @@ void init_game(){
 void victory(){
 	GUI_Text(VICTORY_X, VICTORY_Y, (uint8_t *) "VICTORY!", Yellow, Blue);
 	disable_RIT();
-	disable_timer(0);
 	NVIC_DisableIRQ(EINT1_IRQn);
+	NVIC_DisableIRQ(ADC_IRQn);
+	NVIC_DisableIRQ(CAN_IRQn);
+	disable_timer(0);
+	disable_timer(1);
+	disable_timer(2);
+	disable_timer(3);
 	LPC_PINCON->PINSEL4    &= ~(1 << 20);
 }
 
@@ -100,8 +106,13 @@ void game_over(){
 	draw_lives();
 	GUI_Text(GAME_OVER_X, GAME_OVER_Y, (uint8_t *) "GAME OVER", Yellow, Blue);
 	disable_RIT();
-	disable_timer(0);
 	NVIC_DisableIRQ(EINT1_IRQn);
+	NVIC_DisableIRQ(ADC_IRQn);
+	NVIC_DisableIRQ(CAN_IRQn);
+	disable_timer(0);
+	disable_timer(1);
+	disable_timer(2);
+	disable_timer(3);
 	LPC_PINCON->PINSEL4    &= ~(1 << 20);
 }
 
@@ -130,26 +141,26 @@ bool check_teleport(uint8_t x, uint8_t y){
 void update_score(uint8_t new_x, uint8_t new_y){
 	if(map[new_y][new_x] == 2){
 		disable_interrupts();
-		//prev_score = score;
 		score += (uint16_t) STD_SCORE;
 		next_life+=STD_SCORE;
 		map[new_y][new_x] = 0;
+		changeSong(PILL);
 		enable_interrupts();
 	} else if (map[new_y][new_x] == 3){
 		disable_interrupts();
-		//prev_score = score;
 		score += (uint16_t) POWER_SCORE;
 		next_life+=POWER_SCORE;
 		map[new_y][new_x] = 0;
 		power_pill_active = true;
     ghost_state = FRIGHTENED;
+		changeSong(POWER);
 		enable_interrupts();
 	}
 	if(next_life >= 1000){
 		disable_interrupts();
-		//prev_lives = lives;
 		lives++;
 		next_life-=1000;
+		changeSong(LIFE);
 		enable_interrupts();
 	}
 	if(count_remaining_pills() == 0){
